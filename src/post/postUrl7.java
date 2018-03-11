@@ -19,9 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class postUrl7 {
 
-	static int t_1=0;
-	static int t_2=0;
-	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws Exception {
 //		http://www.dalian-jw.gov.cn:8080/lhsfc/querycx.asp
@@ -30,7 +27,7 @@ public class postUrl7 {
 //		backurl
        //发送 POST 请求
 
-		int i=303,j=4579;
+		int i=6,j=1073;
 		boolean check=false;
 		
 		String str="",str1="",str2="";
@@ -48,14 +45,13 @@ public class postUrl7 {
 		String sr="";
 		int count=1;
 		int anchor=0;
-		new Reminder();
 		
 		do {
 			str1=StringUtils.leftPad(""+i, 3,"0");
 			str2=StringUtils.leftPad(""+j, 5,"0");
 			str="lsbh="+ str1 + str2 +"&verifycode=" +str2+ "&backurl=";
 			now=new Date();
-			System.out.println("====="+t_2+"====="+customerNum+"====="+(String.format("%.2f",speed))+"====="+now+"====="+str1+str2+"=====");
+			System.out.println("========"+customerNum+"====="+(String.format("%.2f",speed))+"====="+now+"====="+str1+str2+"=====");
 		
 //		        String sr=sendPost("http://www.dalian-jw.gov.cn:8080/lhsfc/querycx.asp", "lsbh=04903399&verifycode=8107&backurl=");
 	        	sr=sendPost("http://www.dalian-jw.gov.cn:8080/lhsfc/querycx.asp", str);
@@ -90,7 +86,7 @@ public class postUrl7 {
 		        	if(j < anchor){
 		        		count++;
 		        		j++;
-		        	}else if(count < 20){
+		        	}else if(count < 25){
 		        		count++;
 		        		j++;
 		        	}else if(count < 100){
@@ -149,67 +145,45 @@ public class postUrl7 {
         BufferedReader in = null;
         String result = "";
         try {
-        	t_1=0;
-        	System.out.print("t_1:");
             URL realUrl = new URL(url);
             // 打开和URL之间的连接
-            System.out.print(" "+t_1);
             URLConnection conn = realUrl.openConnection();
 //            System.out.print(",getResponseCode:"+((HttpURLConnection) conn).getResponseCode());
-            System.out.print(" "+t_1);
             // 设置通用的请求属性
             conn.setRequestProperty("accept", "*/*");
-            System.out.print(" "+t_1);
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
             conn.setRequestProperty("connection", "Keep-Alive");
-            System.out.print(" "+t_1);
             conn.setRequestProperty("user-agent",
             		"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0");
-            System.out.print(" "+t_1);
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
-            System.out.print(" "+t_1);
             conn.setDoInput(true);
-            System.out.print(" "+t_1);
             // 获取URLConnection对象对应的输出流
-            System.out.print(" "+t_1);
             out = new PrintWriter(conn.getOutputStream());
             // 发送请求参数
-            System.out.print(" "+t_1);
             out.print(param);
             // flush输出流的缓冲
-            System.out.print(" "+t_1);
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
-            System.out.print(" "+t_1);
 //            in = new BufferedReader(
 //                    new InputStreamReader(conn.getInputStream(),"GBK"));
             InputStreamReader isr = new InputStreamReader(conn.getInputStream(),"GBK");
-            System.out.print(" "+t_1);
             in = new BufferedReader(isr);
-            System.out.print(" "+t_1);
-            System.out.println(" Finished!");
 
             String line;
-            t_2=0;
             
             StringBuffer sb = new StringBuffer();
-            System.out.print("t_2:");
-            while ((line = in.readLine()) != null & (t_2 < 20)) {
-            	System.out.print(" "+t_2);
+            while ((line = in.readLine()) != null ) {
 //                result += line;
             	sb.append(line);
             }
             	
-            if(t_2 > 20){
-            	
-            	return "";
-            }
             in.close();
             isr.close();
             out.close();
             result=sb.toString();
             
-            System.out.println(" Finished.");
         } catch (Exception e) {
             System.out.println("发送 POST 请求出现异常！"+e);
             e.printStackTrace();
@@ -233,30 +207,5 @@ public class postUrl7 {
         return result;
     }   
     
-    public static class Reminder{
-        Timer timer;
-        
-        public Reminder(){
-            timer = new Timer();
-            timer.schedule(new TimerTask(){
-                @SuppressWarnings("static-access")
-				public void run(){
-                	t_1++;
-                	t_2++;
-                	if(t_1 > 20 | t_2 > 20){
-                		t_1=0;t_2=0;
-                		try {
-                			System.out.println("Wait 3 seconds......");
-							Thread.currentThread().sleep(3000);
-							
-						} catch (InterruptedException e) {
-							System.out.println("Time-out!");
-							e.printStackTrace();
-						}
-                	}
-                }
-            }, 1000,1000);
-        }
-    } 
-
+ 
 }
